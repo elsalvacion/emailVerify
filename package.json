@@ -1,0 +1,31 @@
+{
+  "name": "jobs-backend",
+  "version": "1.0.0",
+  "description": "backend for the jobs project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "dev": "concurrently \"npm run server\" \" npm start --prefix client\""
+  },
+  "author": "elsalvacion",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "csv-parser": "^3.0.0",
+    "dotenv": "^10.0.0",
+    "email-check": "^1.1.0",
+    "email-verify": "^0.2.1",
+    "express": "^4.17.1",
+    "express-mongo-sanitize": "^2.1.0",
+    "express-validator": "^6.12.1",
+    "helmet": "^4.6.0",
+    "hpp": "^0.2.3",
+    "mongoose": "^6.0.12",
+    "xss-clean": "^0.1.1"
+  },
+  "devDependencies": {
+    "concurrently": "^6.3.0",
+    "nodemon": "^2.0.14"
+  }
+}
