@@ -1,5 +1,5 @@
 const config = {
-  url: "http://localhost:5000",
+  url: "https://valid-email.herokuapp.com",
 };
 
 export default config;
