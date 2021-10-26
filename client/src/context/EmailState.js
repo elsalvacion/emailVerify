@@ -49,7 +49,8 @@ const EmailState = (props) => {
     const json = await res.json();
 
     if (res.status) {
-      download(name, json);
+      reset();
+      setResult(json);
     }
   };
 
