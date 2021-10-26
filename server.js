@@ -1,5 +1,5 @@
 const express = require("express");
-
+const cors = require("cors");
 const helmet = require("helmet");
 const xss = require("xss-clean");
 const hpp = require("hpp");
@@ -16,12 +16,11 @@ const app = express();
 app.use(helmet());
 app.use(xss());
 app.use(hpp());
+app.use(cors());
 app.use(fileupload());
 // express body parser
 
 app.use(express.json());
-
-app.use(express.static(__dirname + "/public"));
 
 app.use("/email", email);
 
