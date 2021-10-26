@@ -21,6 +21,8 @@ app.use(fileupload());
 
 app.use(express.json());
 
+app.use(express.static(__dirname + "/public"));
+
 app.use("/email", email);
 
 const PORT = process.env.PORT || 5000;
