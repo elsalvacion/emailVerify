@@ -11,6 +11,11 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    "@media (max-width:780px)": {
+      // eslint-disable-line no-useless-computed-key
+      maxHeight: "80vh",
+      height: "fit-content",
+    },
   },
   uploadBtn: {
     marginTop: 15,

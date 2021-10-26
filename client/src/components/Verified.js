@@ -24,7 +24,7 @@ const Verified = ({ result }) => {
   const classes = useStyles();
   return (
     <Fragment>
-      <Typography variant="h4" style={{ color: "#bdbdbd" }}>
+      <Typography style={{ color: "#bdbdbd" }}>
         Here are you verify emails
       </Typography>
       <br />

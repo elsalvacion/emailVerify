@@ -11,12 +11,12 @@ const Content = () => {
     <Grid container>
       <Grid item xs={12} sm={6}>
         <Zoom>
-          <RightSide />
+          <UploadFrom />
         </Zoom>
       </Grid>
       <Grid item xs={12} sm={6}>
         <Zoom>
-          <UploadFrom />
+          <RightSide />
         </Zoom>
       </Grid>
     </Grid>

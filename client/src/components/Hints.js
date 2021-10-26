@@ -14,12 +14,6 @@ const Hints = () => {
         <ListItem>
           <ListItemText primary="3. When finished uploading, you may analyze or clean your list." />
         </ListItem>
-        <ListItem>
-          <ListItemText primary="" />
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="" />
-        </ListItem>
       </List>
     </div>
   );

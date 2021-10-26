@@ -30,7 +30,9 @@ const EmailState = (props) => {
       body: formData,
     });
     const json = await res.json();
-    process(json.newName);
+    if (res.status) {
+      process(json.newName);
+    }
   };
 
   const process = async (name) => {

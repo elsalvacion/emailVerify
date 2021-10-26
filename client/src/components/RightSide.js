@@ -11,6 +11,11 @@ const useStyles = makeStyles({
     maxHeight: "82vh",
     background: "transparent",
     color: "#f5f5f5",
+    "@media (max-width:780px)": {
+      // eslint-disable-line no-useless-computed-key
+      maxHeight: "82vh",
+      height: "fit-content",
+    },
   },
   spinner: {
     padding: 25,
