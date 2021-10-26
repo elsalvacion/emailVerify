@@ -1,14 +1,11 @@
 const express = require("express");
-const mongoSanitize = require("express-mongo-sanitize");
-const cors = require("cors");
+
 const helmet = require("helmet");
 const xss = require("xss-clean");
 const hpp = require("hpp");
-
+const fileupload = require("express-fileupload");
 // require and use config files
 require("dotenv").config({ path: "./config/.env" });
-// const connectDB = require("./config/db");
-// connectDB();
 
 // import routes
 const email = require("./routes/email");
@@ -16,12 +13,10 @@ const email = require("./routes/email");
 const app = express();
 
 // external middlewares
-app.use(mongoSanitize());
-app.use(cors());
 app.use(helmet());
 app.use(xss());
 app.use(hpp());
-
+app.use(fileupload());
 // express body parser
 
 app.use(express.json());

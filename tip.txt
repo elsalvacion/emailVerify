@@ -1,0 +1,11 @@
+          // emailCheck(result.email)
+          //   .then(function (isEmail) {
+          //     if (isEmail) verifiedEmails.push(result.email);
+          //   })
+          //   .catch(function (err) {
+          //     if (err.message === "refuse") {
+          //       // The MX server is refusing requests from your IP address.
+          //     } else {
+          //       // Decide what to do with other errors.
+          //     }
+          //   });

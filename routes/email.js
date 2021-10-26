@@ -2,56 +2,104 @@ const router = require("express").Router();
 const verifier = require("email-verify");
 const csv = require("csv-parser");
 const fs = require("fs");
+const path = require("path");
+const { nanoid } = require("nanoid");
 
-// var emailCheck = require("email-check");
+// name
+let name;
+let newName;
 
-const { body, validationResult } = require("express-validator");
-router.post(
-  "/",
-  body("email").isEmail().withMessage("Enter a valid email"),
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
+// upload file
+router.post("/upload", (req, res) => {
+  try {
+    if (!req.files) {
+      return res.status(400).json({ success: false, msg: "upload a csv file" });
     }
-    const results = [];
-    const verifiedEmails = [];
-    const wrongEmail = [];
-    fs.createReadStream("data.csv")
+
+    const file = req.files.file;
+
+    // Make sure the image is a photo
+    if (path.parse(file.name).ext !== ".csv") {
+      return res
+        .status(400)
+        .json({ success: false, msg: "please upload a csv file" });
+    }
+
+    // Check filesize
+    if (file.size > process.env.MAX_FILE_UPLOAD) {
+      return res
+        .status(400)
+        .json({ success: false, msg: "file size greater than 5MB" });
+    }
+
+    // console.log(file.data.toString());
+
+    name = file.name;
+
+    // Create custom filename
+    file.name = `${nanoid(6)}${path.parse(file.name).ext}`;
+    newName = file.name;
+    file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
+      if (err) {
+        return res
+          .status(400)
+          .json({ success: false, msg: "Problem with upload" });
+      }
+    });
+    res
+      .status(200)
+      .json({ success: true, msg: "File uploaded", newName, name });
+  } catch (err) {
+    return res.status(500).json({ msg: "Server Error" });
+  }
+});
+
+// get filtered data
+router.post("/filter", (req, res) => {
+  const results = [];
+  const verifiedEmails = [];
+  const wrongEmail = [];
+
+  try {
+    fs.createReadStream(`${process.env.FILE_UPLOAD_PATH}/${req.body.name}`)
       .pipe(csv())
       .on("data", (data) => {
         results.push(data);
       })
       .on("end", () => {
         results.forEach((result) => {
-          // emailCheck(result.email)
-          //   .then(function (isEmail) {
-          //     if (isEmail) verifiedEmails.push(result.email);
-          //   })
-          //   .catch(function (err) {
-          //     if (err.message === "refuse") {
-          //       // The MX server is refusing requests from your IP address.
-          //     } else {
-          //       // Decide what to do with other errors.
-          //     }
-          //   });
-
           verifier.verify(result.email, function (err, info) {
-            if (err) wrongEmail.push(result.email);
+            if (err) wrongEmail.push(result);
             else {
               verifiedEmails.push(result.email);
             }
           });
-
-          // res.status(200).json({ success: true, msg: verifiedEmails });
         });
       });
 
     setTimeout(() => {
-      console.log(results.length, verifiedEmails.length);
-      res.json({ success: true, wronEmails: wrongEmail, msg: verifiedEmails });
+      res.json({
+        success: true,
+        wronEmails: wrongEmail,
+        msg: verifiedEmails,
+        filtered: Math.ceil(
+          ((results.length - verifiedEmails.length) / results.length) * 100
+        ),
+      });
     }, 15000);
+  } catch (err) {
+    return res.status(500).json({ msg: "Server Error" });
   }
-);
+});
+
+router.post("/delete", async (req, res) => {
+  try {
+    fs.unlinkSync(`${process.env.FILE_UPLOAD_PATH}/${req.body.newName}`);
+
+    res.status(200).json({ success: true, msg: "File deleted" });
+  } catch (err) {
+    return res.status(500).json({ msg: "Server Error" });
+  }
+});
 
 module.exports = router;

@@ -1,7 +1,7 @@
 {
-  "name": "jobs-backend",
+  "name": "emailVerify",
   "version": "1.0.0",
-  "description": "backend for the jobs project",
+  "description": "app use to verify emails",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -11,17 +11,16 @@
   "author": "elsalvacion",
   "license": "MIT",
   "dependencies": {
-    "cors": "^2.8.5",
     "csv-parser": "^3.0.0",
     "dotenv": "^10.0.0",
     "email-check": "^1.1.0",
     "email-verify": "^0.2.1",
     "express": "^4.17.1",
-    "express-mongo-sanitize": "^2.1.0",
-    "express-validator": "^6.12.1",
+    "express-fileupload": "^1.2.1",
     "helmet": "^4.6.0",
     "hpp": "^0.2.3",
     "mongoose": "^6.0.12",
+    "nanoid": "^3.1.30",
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
