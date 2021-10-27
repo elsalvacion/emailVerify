@@ -17,24 +17,19 @@ router.post("/filter", (req, res) => {
         else {
           verifiedEmails.push(email);
         }
-
-        if (i + 1 === emails.length) {
-          res.json({
-            success: true,
-            wrongEmails: wrongEmail,
-            msg: verifiedEmails,
-            filtered: Math.ceil(
-              ((emails.length - verifiedEmails.length) / emails.length) * 100
-            ),
-          });
-        }
       });
-      idx++;
     });
 
-    // setTimeout(() => {
-
-    // }, 15000);
+    setTimeout(() => {
+      res.json({
+        success: true,
+        wrongEmails: wrongEmail,
+        msg: verifiedEmails,
+        filtered: Math.ceil(
+          ((emails.length - verifiedEmails.length) / emails.length) * 100
+        ),
+      });
+    }, 30000);
   } catch (err) {
     return res.status(500).json({ msg: "Server Error" });
   }
