@@ -1,81 +1,68 @@
 import { useReducer } from "react";
 import emailReducer from "./emailReducer";
 import emailContext from "./emailContext";
-import {
-  SET_PROCESSING,
-  SET_UPLOADING,
-  SET_DOWNLOADING,
-  RESET,
-  SET_RESULT,
-} from "./Types";
+import { SET_PROCESSING, RESET, SET_RESULT } from "./Types";
 
 import config from "../config";
 
 const EmailState = (props) => {
   const initialState = {
-    uploading: false,
     processing: false,
-    downloading: false,
     result: null,
+    data: null,
   };
 
   const [state, dispatch] = useReducer(emailReducer, initialState);
 
-  const upload = async (files) => {
-    setUploading();
-    const formData = new FormData();
-    formData.append("file", files[0]);
-    const res = await fetch(`${config.url}/email/upload`, {
-      method: "POST",
-      body: formData,
-    });
-    const json = await res.json();
-    if (res.status) {
-      process(json.newName);
-    }
-  };
-
-  const process = async (name) => {
+  const process = async (jsonArray, index) => {
     setprocessing();
+    const re = /\S+@\S+\.\S+/;
+    let emails = [];
+    const filtered = [];
+    let columns = null;
+    jsonArray.forEach((data) => {
+      if (re.test(data.data[index])) {
+        emails.push(data.data[index]);
+      }
+    });
+
     const res = await fetch(`${config.url}/email/filter`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name,
+        emails,
       }),
     });
     const json = await res.json();
 
-    if (res.status) {
+    if (json) {
+      jsonArray.forEach((data, i) => {
+        if (i === 0) columns = data.data;
+        if (json.msg.indexOf(data.data[index]) !== -1) {
+          filtered.push(data.data);
+        }
+      });
+
       reset();
-      setResult(json);
+
+      const newCsvData = [];
+      filtered.forEach((data) => {
+        let fields = {};
+        data.forEach((field, i) => {
+          fields[columns[i]] = field;
+        });
+        newCsvData.push(fields);
+      });
+      setResult({
+        data: filtered,
+        emailIndex: index,
+        noOfCorrectEmails: json.msg.length,
+        noOfWrongEmails: json.wrongEmails.length,
+        csv: newCsvData,
+      });
     }
-  };
-
-  const download = async (newName, data) => {
-    setDownloading();
-    const res = await fetch(`${config.url}/email/delete`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        newName,
-      }),
-    });
-
-    if (res.status) {
-      reset();
-      setResult(data);
-    }
-  };
-
-  const setUploading = () => {
-    dispatch({
-      type: SET_UPLOADING,
-    });
   };
 
   const setprocessing = () => {
@@ -84,11 +71,6 @@ const EmailState = (props) => {
     });
   };
 
-  const setDownloading = () => {
-    dispatch({
-      type: SET_DOWNLOADING,
-    });
-  };
   const setResult = (payload) => {
     dispatch({
       type: SET_RESULT,
@@ -105,13 +87,9 @@ const EmailState = (props) => {
   return (
     <emailContext.Provider
       value={{
-        uploading: state.uploading,
         processing: state.processing,
-        downloading: state.downloading,
         result: state.result,
-        upload,
         process,
-        download,
       }}
     >
       {props.children}

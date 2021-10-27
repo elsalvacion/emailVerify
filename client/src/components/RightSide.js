@@ -33,7 +33,7 @@ const RightSide = () => {
     <Card elevation={2} className={classes.card}>
       <CardContent>
         <Container className={classes.spinner}>
-          {!result ? (
+          {!result || processing ? (
             <Fragment>
               <Hints />
               {(uploading || processing || downloading) && <Spinner />}

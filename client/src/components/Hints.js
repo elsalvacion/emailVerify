@@ -1,9 +1,12 @@
-import { List, ListItem, ListItemText } from "@material-ui/core";
+import { List, ListItem, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 
 const Hints = () => {
   return (
     <div>
+      <Typography align="center" variant="h5">
+        Hints
+      </Typography>
       <List>
         <ListItem>
           <ListItemText primary="1. Upload CSV format file " />

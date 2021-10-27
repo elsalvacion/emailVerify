@@ -1,15 +1,4 @@
-export const SET_UPLOADING = "SET_UPLOADING";
-
-export const GET_UPLOADING = "GET_UPLOADING";
-
 export const SET_PROCESSING = "SET_PROCESSING";
-
-export const GET_PROCESSING = "GET_PROCESSING";
-
-export const SET_DOWNLOADING = "SET_DOWNLOADING";
-
-export const GET_DOWNLOADING = "GET_DOWNLOADING";
-
 export const SET_RESULT = "SET_RESULT";
 
 export const RESET = "RESET";
