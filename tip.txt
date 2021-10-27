@@ -9,3 +9,6 @@
           //       // Decide what to do with other errors.
           //     }
           //   });
+
+
+           "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
