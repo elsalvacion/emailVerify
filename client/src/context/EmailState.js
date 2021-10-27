@@ -3,8 +3,6 @@ import emailReducer from "./emailReducer";
 import emailContext from "./emailContext";
 import { SET_PROCESSING, RESET, SET_RESULT } from "./Types";
 
-import config from "../config";
-
 const EmailState = (props) => {
   const initialState = {
     processing: false,
@@ -26,7 +24,7 @@ const EmailState = (props) => {
       }
     });
 
-    const res = await fetch(`${config.url}/email/filter`, {
+    const res = await fetch(`/email/filter`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
