@@ -13,23 +13,25 @@ router.post("/filter", (req, res) => {
   try {
     emails.forEach((email, i) => {
       verifier.verify(email, function (err, info) {
-        if (!info.success) wrongEmail.push(email);
-        else {
+        if (err) {
+          console.log(err);
+          wrongEmail.push(email);
+        } else {
           verifiedEmails.push(email);
+        }
+
+        if (i + 1 === emails.length) {
+          res.json({
+            success: true,
+            wrongEmails: wrongEmail,
+            msg: verifiedEmails,
+            filtered: Math.ceil(
+              ((emails.length - verifiedEmails.length) / emails.length) * 100
+            ),
+          });
         }
       });
     });
-
-    setTimeout(() => {
-      res.json({
-        success: true,
-        wrongEmails: wrongEmail,
-        msg: verifiedEmails,
-        filtered: Math.ceil(
-          ((emails.length - verifiedEmails.length) / emails.length) * 100
-        ),
-      });
-    }, 30000);
   } catch (err) {
     return res.status(500).json({ msg: "Server Error" });
   }
