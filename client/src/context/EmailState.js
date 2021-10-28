@@ -24,15 +24,18 @@ const EmailState = (props) => {
       }
     });
 
-    const res = await fetch(`http://localhost:5000/email/filter`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        emails,
-      }),
-    });
+    const res = await fetch(
+      `https://correct-email.herokuapp.com/email/filter`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          emails,
+        }),
+      }
+    );
     const json = await res.json();
     console.log(json.wrongEmails.length, json.msg.length);
     if (json) {
